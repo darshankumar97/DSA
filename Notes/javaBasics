@@ -1,0 +1,91 @@
+Got it 👍 let’s make it **super practical** with examples you can actually run in Java.
+
+---
+
+## 🔹 Case 1: **Primitives (Simple values like int)**
+
+```java
+public class Main {
+    static void changePrimitive(int x) {
+        x = 100;  // only local copy changes
+    }
+
+    public static void main(String[] args) {
+        int a = 5;
+        changePrimitive(a);
+        System.out.println(a); // 👉 prints 5 (unchanged)
+    }
+}
+```
+
+👉 Why? Because Java **copied the value** of `a` into `x`.
+They are separate memory boxes.
+
+---
+
+## 🔹 Case 2: **Objects (like arrays or custom objects)**
+
+```java
+public class Main {
+    static void changeArray(int[] arr) {
+        arr[0] = 100;  // modifies original array element
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3};
+        changeArray(nums);
+        System.out.println(nums[0]); // 👉 prints 100 (changed)
+    }
+}
+```
+
+👉 Why? Because Java passed a **copy of the reference**.
+Both `arr` and `nums` point to the **same array in memory**, so modifying the contents affects the original.
+
+⚠️ But remember: the **reference itself** is copied. If you reassign inside method, it won’t affect outside.
+
+```java
+static void reassignArray(int[] arr) {
+    arr = new int[]{9,9,9}; // new reference assigned locally
+}
+```
+
+Outside, the original array `nums` remains unchanged.
+
+---
+
+## 🔹 Case 3: **Strings (Special case)**
+
+```java
+public class Main {
+    static void changeString(String s) {
+        s = "Hello";  // new String assigned locally
+    }
+
+    public static void main(String[] args) {
+        String text = "Java";
+        changeString(text);
+        System.out.println(text); // 👉 prints "Java"
+    }
+}
+```
+
+👉 Why? Because **Strings are immutable** in Java.
+Inside the method, `s` was pointing to a new `"Hello"` object, but the original `"Java"` is untouched.
+
+---
+
+## ✅ Practical Summary
+
+* **Primitive** → copy of value → changes don’t affect outside.
+* **Object** → copy of reference → you can mutate the object (change its content), but reassigning won’t affect outside.
+* **String** → immutable object → behaves like primitive for modifications.
+
+---
+
+👉 In interviews, you can say:
+“Java is strictly call by value. For objects, the value being passed is the reference. That’s why we can change object contents inside a method, but we can’t reassign the original reference.”
+
+---
+
+Would you like me to also draw a **memory diagram (boxes and arrows)** to visualize how variables and references behave in these cases?
