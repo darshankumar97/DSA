@@ -1,0 +1,138 @@
+public class SecondLargest {
+    
+    // BRUTE FORCE APPROACH
+    // Time: O(n log n), Space: O(1) - if in-place sort
+    public static int bruteForce(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return -1; // Invalid case
+        }
+        
+        // Sort the array in ascending order
+        java.util.Arrays.sort(arr);
+        
+        // Traverse from end to find second largest
+        // (skip duplicates of largest element)
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] != arr[arr.length - 1]) {
+                return arr[i];
+            }
+        }
+        
+        return -1; // All elements are same
+    }
+    
+    
+    // BETTER APPROACH
+    // Time: O(2n), Space: O(1)
+    public static int betterApproach(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return -1;
+        }
+        
+        // First pass: Find the largest element
+        int largest = Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > largest) {
+                largest = arr[i];
+            }
+        }
+        
+        // Second pass: Find second largest (not equal to largest)
+        int secondLargest = Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > secondLargest && arr[i] != largest) {
+                secondLargest = arr[i];
+            }
+        }
+        
+        return (secondLargest == Integer.MIN_VALUE) ? -1 : secondLargest;
+    }
+    
+    
+    // OPTIMIZED APPROACH (Single Pass)
+    // Time: O(n), Space: O(1)
+    public static int optimized(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return -1;
+        }
+        
+        int largest = Integer.MIN_VALUE;
+        int secondLargest = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > largest) {
+                // Current element is larger than largest
+                // So largest becomes second largest
+                secondLargest = largest;
+                largest = arr[i];
+            } else if (arr[i] > secondLargest && arr[i] != largest) {
+                // Current element is between largest and secondLargest
+                // and not equal to largest
+                secondLargest = arr[i];
+            }
+        }
+        
+        return (secondLargest == Integer.MIN_VALUE) ? -1 : secondLargest;
+    }
+    
+    
+    // Test all approaches
+    public static void main(String[] args) {
+        int[][] testCases = {
+            {12, 35, 1, 10, 34, 1},
+            {10, 10, 10},
+            {10, 5, 10},
+            {5},
+            {3, 2, 1, 5, 6, 4},
+            {7, 7, 7, 7},
+            {1, 2}
+        };
+        
+        System.out.println("Testing all approaches:\n");
+        
+        for (int i = 0; i < testCases.length; i++) {
+            int[] arr = testCases[i].clone();
+            int[] arr2 = testCases[i].clone();
+            int[] arr3 = testCases[i].clone();
+            
+            System.out.println("Test Case " + (i + 1) + ": " + 
+                             java.util.Arrays.toString(testCases[i]));
+            
+            int result1 = bruteForce(arr);
+            int result2 = betterApproach(arr2);
+            int result3 = optimized(arr3);
+            
+            System.out.println("Brute Force:  " + result1);
+            System.out.println("Better:       " + result2);
+            System.out.println("Optimized:    " + result3);
+            System.out.println();
+        }
+    }
+}
+
+/*
+COMPLEXITY ANALYSIS:
+
+1. BRUTE FORCE:
+   - Time: O(n log n) - due to sorting
+   - Space: O(1) - in-place sorting
+   - Approach: Sort array, traverse from end skipping duplicates
+
+2. BETTER:
+   - Time: O(2n) = O(n) - two passes through array
+   - Space: O(1)
+   - Approach: First pass finds largest, second pass finds second largest
+
+3. OPTIMIZED:
+   - Time: O(n) - single pass
+   - Space: O(1)
+   - Approach: Track both largest and second largest in one pass
+
+KEY POINTS:
+- Handle edge cases: null array, size < 2, all same elements
+- Watch for duplicates: second largest should be distinct from largest
+- Use Integer.MIN_VALUE for initialization to handle negative numbers
+- Optimized approach updates second largest in two scenarios:
+  a) When new largest is found
+  b) When element is between largest and second largest
+*/
